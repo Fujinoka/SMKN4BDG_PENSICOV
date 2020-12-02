@@ -7,7 +7,7 @@ masih dalm proses perbaikan
 ## Team Pensicov
 ### Pembina
 - Ibu Rin Rin
-###Anggota
+### Anggota
 - Andree Meilio Caniago ( Ketua )
 - Puji Saefuloh
 - Shafa Firazty Rihadatul 'Aisy
