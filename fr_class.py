@@ -93,7 +93,7 @@ def deteksi():
                 # os.system('cls')
 
                 if (count == 5):
-                    print("absen for " + name + ", has held" + str(count) + " x frame")
+                    print("absen for " + name + ", has held " + str(count) + " x frame")
 
         process_this_frame = not process_this_frame
 
@@ -114,6 +114,9 @@ def deteksi():
 
         ret, buffer = cv2.imencode('.jpg', frame)
         frame = buffer.tobytes()
+
+        # if (count == 5):
+        #     return 3
 
         yield (b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
