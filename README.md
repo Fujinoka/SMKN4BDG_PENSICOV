@@ -2,7 +2,7 @@
 PENSICOV adalah singkatan dari Penjagaan Siswa dari Covid-19 yang merupakan sistem absensi dengan mempermudah serta mendukung protokol kesehatan yang nantinya diterapkan di masa new normal
 
 # Cara Pakai 
-- pip install -r requirement.txt
+- pip install -r requirements.txt
 - python app.py
 
 ## Team Pensicov
