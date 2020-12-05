@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Live Streaming Demonstration</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        body {
+            background-color: #f1f4f7;
+            /* font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif; */
+        }
+        .pensi {
+            color: #30a5ff;
+        }
+        .navbar-header .navbar-brand {
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-default navbar-inverse navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{{ url_for('index') }}"><span class="pensi">PENSI</span>COV</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{{ url_for('index') }}">Beranda</a></li>
+                    <li class="active"><a href="{{ url_for('face_recognition') }}">Input Absensi</a></li>
+                    <li><a href="{{ url_for('about') }}">Tentang</a></li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </nav>
+    
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <ol class="breadcrumb">
+                    <li>Identifikasi Wajah</li>
+                    <li>Deteksi Masker</li>
+                    <li><a href="" class="active">Absensi</a></li>
+                </ol>
+                <div class="text-center">
+                    <!-- <h3 class="mt-3">Selamat Datang {{ nama }}!</h3> -->
+                    <br>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <img src="{{url_for('static', filename=photo + '.png')}}" class="img-thumbnail img-responsive" />
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Selamat Datang {{ nama }}!</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Clock-in : {{ waktu_absen }}</h6>
+                                <p class="card-text">
+                                    <b>No. Absen : </b> {{ no_absen }} <br/>
+                                    <b>NISN : </b> {{ nisn }} <br/>
+                                    <b>Nama : </b> {{ nama }} <br/>
+                                    <b>Kelas : </b> {{ kelas }} <br/>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <p class="text-center">
+                            Mengarahkan ulang ke input absen dalam <span id="countdown">10</span> detik
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+
+    <script>
+        var seconds = 10;
+    
+        function countdown() {
+            seconds = seconds - 1;
+            if (seconds < 0) {
+                window.location.href = "{{ url_for('face_recognition') }}";
+            } else {
+                document.getElementById("countdown").innerHTML = seconds;
+                window.setTimeout("countdown()", 1000);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            countdown();
+        });
+    </script>
+</body>
+
+</html>

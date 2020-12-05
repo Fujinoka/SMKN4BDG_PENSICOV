@@ -9,8 +9,8 @@
     <title>Live Streaming Demonstration</title>
 
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha512-Dop/vW3iOtayerlYAqCgkVr2aTr2ErwwTYOvRFUpzl2VhCMJyjQF0Q9TjUXIo6JhuM/3i0vVEt2e/7QQmnHQqw==" crossorigin="anonymous" />
-    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -46,8 +46,8 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="active"><a href="{{ url_for('index') }}">Beranda</a></li>
-                    <li><a href="{{ url_for('face_recognition') }}">Input Absensi</a></li>
+                    <li><a href="{{ url_for('index') }}">Beranda</a></li>
+                    <li class="active"><a href="{{ url_for('face_recognition') }}">Input Absensi</a></li>
                     <li><a href="{{ url_for('about') }}">Tentang</a></li>
                 </ul>
             </div>
@@ -58,20 +58,57 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-lg-12">
-                <div class="jumbotron">
-                    <h1>Selamat Datang!</h1>
-                    <p>Jaga Jarak, Gunakan Masker, Cuci Tangan</p>
-                    <p><a class="btn btn-primary btn-lg" href="{{ url_for('face_recognition') }}" role="button">Input Absen</a></p>
-                  </div>
+            <div class="col-lg-8 col-lg-offset-2">
+                <ol class="breadcrumb">
+                    <li>Identifikasi Wajah</li>
+                    <li><a href="" class="active">Deteksi Masker</a></li>
+                    <li>Absensi</li>
+                </ol>
+                <div class="text-center">
+                    <h3 class="mt-5">Deteksi Masker</h3>
+                </div>
+                <br/>
+                <div class="alert alert-info mt-5" role="alert">
+                    Mohon hadapkan wajah anda ke kamera, kenakan masker dan tahan selama 5 detik setelah terdeteksi
+                </div>
+                <img src="{{ url_for('video_feed_fd') }}" id="fd_image" width="100%" class="img-thumbnail img-responsive">
             </div>
         </div>
     </div>
 
+
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha512-oBTprMeNEKCnqfuqKd6sbvFzmFQtlXS3e0C/RGFV0hD6QzhHV+ODfaQbAlmY6/q0ubbwlAM/nCJjkrgA3waLzg==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <script>
+        function check() {
+
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const name = urlParams.get('name')
+
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == XMLHttpRequest.DONE) {
+                    console.log(xhr.responseText);
+                    if(xhr.responseText != "" && xhr.responseText == "MaskOn"){
+                        window.location = "http://localhost:5000/person?name=" + name;
+                    }else{
+                        setTimeout(function(){
+                            check();
+                        },1000);
+                    }
+                }
+            }
+            xhr.open('GET', "{{ url_for('mask_detection_result') }}", true);
+            xhr.send(null);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            check();            
+        });
+    </script>
 </body>
 
 </html>

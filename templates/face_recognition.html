@@ -46,8 +46,8 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="active"><a href="{{ url_for('index') }}">Beranda</a></li>
-                    <li><a href="{{ url_for('face_recognition') }}">Input Absensi</a></li>
+                    <li><a href="{{ url_for('index') }}">Beranda</a></li>
+                    <li class="active"><a href="{{ url_for('face_recognition') }}">Input Absensi</a></li>
                     <li><a href="{{ url_for('about') }}">Tentang</a></li>
                 </ul>
             </div>
@@ -58,15 +58,48 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-lg-12">
-                <div class="jumbotron">
-                    <h1>Selamat Datang!</h1>
-                    <p>Jaga Jarak, Gunakan Masker, Cuci Tangan</p>
-                    <p><a class="btn btn-primary btn-lg" href="{{ url_for('face_recognition') }}" role="button">Input Absen</a></p>
-                  </div>
+            <div class="col-lg-8 col-lg-offset-2">
+                <ol class="breadcrumb">
+                    <li><a href="" class="active">Identifikasi Wajah</a></li>
+                    <li>Deteksi Masker</li>
+                    <li>Absensi</li>
+                </ol>
+                <div class="text-center">
+                    <h3 class="mt-5">Identifikasi Wajah</h3>
+                </div>
+                <br/>
+                <div class="alert alert-info mt-5" role="alert">
+                    Mohon hadapkan wajah anda ke kamera, dan tahan selama 5 detik setelah terdeteksi
+                </div>
+                <img src="{{ url_for('video_feed_fr') }}" id="fr_image" width="100%" class="img-thumbnail img-responsive">
             </div>
         </div>
     </div>
+
+    <script>
+        function check(){
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == XMLHttpRequest.DONE) {
+                    console.log(xhr.responseText);
+                    if(xhr.responseText != "" && xhr.responseText != "Unknown"){
+                        window.location = "http://localhost:5000/mask_detection?name="+xhr.responseText;
+                    }else{
+                        setTimeout(function(){
+                            check();
+                        },1000);
+                    }
+                }
+            }
+            xhr.open('GET', "{{ url_for('face_recognition_result') }}", true);
+            xhr.send(null);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            check();            
+        });
+    </script>
+
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>

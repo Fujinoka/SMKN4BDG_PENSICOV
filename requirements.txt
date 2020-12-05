@@ -1,0 +1,12 @@
+tensorflow
+keras
+imutils
+numpy
+opencv-python
+matplotlib
+argparse
+scipy
+scikit-learn
+pillow
+Flask (framework)
+face_recognition

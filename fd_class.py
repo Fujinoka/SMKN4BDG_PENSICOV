@@ -13,6 +13,17 @@ import time
 import cv2
 import os
 
+md_result = ""
+
+def set_result():
+    global md_result
+    md_result = "error"
+    return md_result
+
+def get_result():
+    global md_result
+    return md_result
+
 def detect_and_predict_mask(frame, faceNet, maskNet, args):
 	# grab the dimensions of the frame and then construct a blob
 	# from it
@@ -74,7 +85,7 @@ def detect_and_predict_mask(frame, faceNet, maskNet, args):
 	# locations
 	return (locs, preds)
 
-def tes():
+def deteksi_masker():
     # construct the argument parser and parse the arguments
     ap = argparse.ArgumentParser()
     ap.add_argument("-f", "--face", type=str,
@@ -102,6 +113,10 @@ def tes():
     print("[INFO] starting video stream...")
     vs = VideoStream(src=0).start()
     time.sleep(2.0)
+
+    
+    count = 0
+    wearMask = "MaskOff"
 
     # loop over the frames from the video stream
     while True:
@@ -135,13 +150,27 @@ def tes():
                 cv2.FONT_HERSHEY_SIMPLEX, 0.45, color, 2)
             cv2.rectangle(frame, (startX, startY), (endX, endY), color, 2)
 
+            if (mask > withoutMask):
+                count = count + 1
+            else:
+                count = 0
+                wearMask = "MaskOff"
+
+        if (count == 5):
+            wearMask = "MaskOn"
+            break
+
         ret, buffer = cv2.imencode('.jpg', frame)
         frame = buffer.tobytes()
 
         yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
 
-        # print(frame)
+    global md_result
+    md_result = wearMask
+    cv2.destroyAllWindows()
+    vs.stop()
+    
 
         # show the output frame
         # cv2.imshow("Frame", frame)
@@ -154,5 +183,3 @@ def tes():
     # do a bit of cleanup
     # cv2.destroyAllWindows()
     # vs.stop()
-
-# tes()

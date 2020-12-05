@@ -3,8 +3,18 @@ import cv2
 import numpy as np
 import os
 
+result = ""
 
-def deteksi():
+def set_result():
+    global result
+    result = "error"
+    return result
+
+def get_result():
+    global result
+    return result
+
+def identifikasi_wajah():
     # This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
     # other example, but it includes some basic performance tweaks to make things run a lot faster:
     #   1. Process each video frame at 1/4 resolution (though still display it at full resolution)
@@ -17,27 +27,36 @@ def deteksi():
     puji_image = face_recognition.load_image_file("images/puji.png")
     puji_face_encoding = face_recognition.face_encodings(puji_image)[0]
 
-    andree_image = face_recognition.load_image_file("images/andree.jpeg")
+    andree_image = face_recognition.load_image_file("images/andree.png")
     andree_face_encoding = face_recognition.face_encodings(andree_image)[0]
 
-    dwi_image = face_recognition.load_image_file("images/dwiputra.jpeg")
+    dwi_image = face_recognition.load_image_file("images/dwiputra.png")
     dwi_face_encoding = face_recognition.face_encodings(dwi_image)[0]
 
-    shafa_image = face_recognition.load_image_file("images/shafa.jpeg")
+    shafa_image = face_recognition.load_image_file("images/shafa.png")
     shafa_face_encoding = face_recognition.face_encodings(shafa_image)[0]
 
+    aldo_image = face_recognition.load_image_file("images/aldo.png")
+    aldo_face_encoding = face_recognition.face_encodings(aldo_image)[0]
+
+    firdaus_image = face_recognition.load_image_file("images/firdaus.png")
+    firdaus_face_encoding = face_recognition.face_encodings(firdaus_image)[0]
     # Create arrays of known face encodings and their names
     known_face_encodings = [
         puji_face_encoding,
         andree_face_encoding,
         dwi_face_encoding,
-        shafa_face_encoding
+        shafa_face_encoding,
+        aldo_face_encoding,
+        firdaus_face_encoding
     ]
     known_face_names = [
         "Puji",
         "Andree",
         "Dwi",
-        "Shafa"
+        "Shafa",
+        "Aldo",
+        "Firdaus"
     ]
 
     # Initialize some variables
@@ -48,6 +67,7 @@ def deteksi():
 
     temp_name = ""
     count = 0
+    name = ""
 
     while True:
         # Grab a single frame of video
@@ -92,9 +112,6 @@ def deteksi():
 
                 # os.system('cls')
 
-                if (count == 5):
-                    print("absen for " + name + ", has held " + str(count) + " x frame")
-
         process_this_frame = not process_this_frame
 
 
@@ -115,8 +132,9 @@ def deteksi():
         ret, buffer = cv2.imencode('.jpg', frame)
         frame = buffer.tobytes()
 
-        # if (count == 5):
-        #     return 3
+        if (count == 5):
+            print("absen for " + name + ", has held " + str(count) + "x frame")
+            break
 
         yield (b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
@@ -129,5 +147,9 @@ def deteksi():
         #     break
 
     # Release handle to the webcam
-    # video_capture.release()
-    # cv2.destroyAllWindows()
+    global result
+    result = name
+    video_capture.release()
+    cv2.destroyAllWindows()
+    
+    
